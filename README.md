@@ -51,7 +51,7 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
                          └────────────┬─────────────┘
                                       │
                      ┌────────────────┼─────────────────┐
-                     ▼                                   ▼
+                     ▼                                  ▼
         ┌──────────────────────┐              ┌────────────────────────────┐
         │   ML TRAINING PATH   │              │   CRM KNOWLEDGE PATH       │
         │  preprocessing.py    │              │  generate_crm_notes.py     │
@@ -60,7 +60,7 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
         │  → churn_model.pkl   │              │  → ingest_knowledge.py     │
         └──────────┬───────────┘              │  → FAISS vector index      │
                    │                          └─────────────┬──────────────┘
-                    ▼                                         ▼
+                   ▼                                        ▼
         ┌────────────────────────────────────────────────────────────────┐
         │                      app/app.py (Streamlit)                    │
         │                                                                │
