@@ -7,10 +7,6 @@ ChurnGuard AI is an end-to-end system that predicts which telecom customers are
 likely to churn, explains *why* in plain language, and generates a
 personalised retention plan — combining a trained ML model, a local LLM, and
 a retrieval-augmented knowledge base, all served through a Streamlit app.
-
-![Predict Tab Screenshot](docs/screenshots/predict_tab.png)
-*(screenshot placeholder — add after final UI pass)*
-
 ---
 
 ## Table of Contents
@@ -75,7 +71,7 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
         │   ai_engine.py — ChurnAIEngine (Ollama / Llama 3.1)            │
         │   SHAP factors → validated AI explanation → validated strategy │
         │                                                                │
-        │   📚 Knowledge Assistant tab                                  │
+        │   📚 Knowledge Assistant tab                                  │ 
         │   rag_engine.py — ChurnRAGEngine (Ollama embeddings + FAISS)   │
         │   question → retrieve top-k CRM notes → grounded LLM answer    │
         └────────────────────────────────────────────────────────────────┘
