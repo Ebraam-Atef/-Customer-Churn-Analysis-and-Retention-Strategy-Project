@@ -383,16 +383,5 @@ has the highest ROC-AUC (0.840) and is the deployed production model — see
 | Electronic check payment | 45.0% |
 | Two-year contract | 2.8% |
 
----
-
-## Screenshots
-
-*(placeholders — replace with final app screenshots before submission)*
-
-| Predict | Knowledge Assistant | Model Insights |
-|---|---|---|
-| `docs/screenshots/predict_tab.png` | `docs/screenshots/knowledge_tab.png` | `docs/screenshots/insights_tab.png` |
-
----
 
 *Digital Egypt Pioneers Initiative — Data Analytics Specialist Track*
