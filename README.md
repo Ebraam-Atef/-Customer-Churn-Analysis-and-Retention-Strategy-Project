@@ -9,9 +9,6 @@ personalised retention plan — combining a trained ML model, a local LLM, and
 a retrieval-augmented knowledge base, all served through a Streamlit app.
 <<<<<<< HEAD
 
-![Predict Tab Screenshot](docs/screenshots/predict_tab.png)
-*(screenshot placeholder — add after final UI pass)*
-
 ---
 
 ## Table of Contents
