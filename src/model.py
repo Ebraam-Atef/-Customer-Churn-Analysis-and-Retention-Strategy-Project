@@ -152,7 +152,7 @@ def plot_feature_importance(
     fig, ax = plt.subplots(figsize=(9, 6))
     colors = plt.cm.RdYlGn(np.linspace(0.3, 0.9, top_n))
     ax.barh(np.array(feature_names)[idx], importances[idx], color=colors)
-    ax.set_title(f'Top {top_n} Feature Importances — Random Forest',
+    ax.set_title(f'Top {top_n} Feature Importances — {type(model).__name__}',
                  fontsize=13, fontweight='bold')
     ax.set_xlabel('Importance Score')
     ax.invert_yaxis()
@@ -181,13 +181,90 @@ def plot_roc_curve(
     model, X_test: pd.DataFrame, y_test: pd.Series, save_path: str = None
 ) -> None:
     fig, ax = plt.subplots(figsize=(6, 5))
-    RocCurveDisplay.from_estimator(model, X_test, y_test, ax=ax, color='#e63946')
+    RocCurveDisplay.from_estimator(model, X_test, y_test, ax=ax,)
     ax.plot([0, 1], [0, 1], 'k--', lw=1.2)
     ax.set_title('ROC Curve — Best Model', fontweight='bold')
     plt.tight_layout()
     if save_path:
         fig.savefig(save_path, dpi=150, bbox_inches='tight')
     plt.close(fig)
+
+
+def select_production_model(
+    trained_models: dict,
+    raw_results: dict,
+    require_feature_importances: bool = True,
+) -> tuple[str, object]:
+    """
+    Automatically select which trained model gets deployed to production.
+
+    Replaces the previous hardcoded behavior (always deploying the tuned
+    Random Forest regardless of how it compared to other candidates).
+
+    Selection policy
+    ─────────────────
+    Among all trained candidates, pick the one with the highest ROC-AUC
+    THAT IS ALSO PRODUCTION-COMPATIBLE. "Production-compatible" currently
+    means it exposes `.feature_importances_`, because two app features
+    depend on that attribute directly:
+      • The Predict tab's "Key Factors" panel
+      • The Model Insights tab's feature-importance chart
+
+    This is why VotingClassifier is excluded even when it has the best raw
+    ROC-AUC: it's a heterogeneous soft-voting ensemble (LogisticRegression
+    + RandomForestClassifier + GradientBoostingClassifier) with no single
+    coherent importance vector — `voting_clf.feature_importances_` raises
+    AttributeError. Excluding it isn't a workaround for one project; it's
+    a real production requirement given what the serving app actually
+    needs from the deployed estimator.
+
+    This function is criteria-based, not hardcoded to any specific model
+    name. If a future retraining run produces different relative
+    performance, this same logic re-evaluates and promotes whichever
+    model wins under the same rule — no code change required.
+
+    Parameters
+    ----------
+    trained_models : dict[str, estimator]
+        Every fitted model produced by train_and_compare() plus the tuned
+        Random Forest, keyed by display name.
+    raw_results : dict[str, dict]
+        Matching metrics dict — {model_name: {'accuracy':…, 'roc_auc':…}}.
+    require_feature_importances : bool
+        If True (default), only consider models exposing
+        `.feature_importances_`. Set False to select on raw ROC-AUC alone.
+
+    Returns
+    -------
+    (selected_name, selected_model)
+    """
+    eligible = {
+        name: model for name, model in trained_models.items()
+        if (not require_feature_importances) or hasattr(model, 'feature_importances_')
+    }
+
+    excluded = set(trained_models) - set(eligible)
+    if excluded:
+        print(f'[select] Excluded from production candidacy '
+              f'(no feature_importances_): {sorted(excluded)}')
+
+    if not eligible:
+        raise RuntimeError(
+            'No trained model satisfies the production-compatibility '
+            'requirement (feature_importances_). Cannot select a '
+            'deployment candidate.'
+        )
+
+    selected_name = max(eligible, key=lambda k: raw_results[k]['roc_auc'])
+    selected_model = eligible[selected_name]
+
+    print(f'[select] Production candidates (eligible, by ROC-AUC):')
+    for name in sorted(eligible, key=lambda k: -raw_results[k]['roc_auc']):
+        marker = '  <- SELECTED' if name == selected_name else ''
+        print(f'           {name:<25} ROC-AUC={raw_results[name]["roc_auc"]:.4f}  '
+              f'Accuracy={raw_results[name]["accuracy"]:.4f}{marker}')
+
+    return selected_name, selected_model
 
 
 def save_model_bundle(
