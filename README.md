@@ -8,6 +8,11 @@ likely to churn, explains *why* in plain language, and generates a
 personalised retention plan — combining a trained ML model, a local LLM, and
 a retrieval-augmented knowledge base, all served through a Streamlit app.
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+
+![Predict Tab Screenshot](docs/screenshots/predict_tab.png)
+*(screenshot placeholder — add after final UI pass)*
 
 ---
 
@@ -30,6 +35,8 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
 
 ## What This Project Does
 
+<<<<<<< HEAD
+=======
 =======
 ---
 
@@ -53,6 +60,7 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
 ## What This Project Does
 
 >>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a
 1. Trains and compares several classifiers on the Telco Customer Churn dataset
    and automatically deploys the best production-eligible model.
 2. Serves live predictions through a Streamlit app, with a per-customer risk
@@ -79,8 +87,12 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
 <<<<<<< HEAD
                      ▼                                   ▼
 =======
+<<<<<<< HEAD
+                     ▼                                   ▼
+=======
                      ▼                                  ▼
 >>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a
         ┌──────────────────────┐              ┌────────────────────────────┐
         │   ML TRAINING PATH   │              │   CRM KNOWLEDGE PATH       │
         │  preprocessing.py    │              │  generate_crm_notes.py     │
@@ -92,8 +104,12 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
 <<<<<<< HEAD
                     ▼                                         ▼
 =======
+<<<<<<< HEAD
+                    ▼                                         ▼
+=======
                    ▼                                        ▼
 >>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a
         ┌────────────────────────────────────────────────────────────────┐
         │                      app/app.py (Streamlit)                    │
         │                                                                │
@@ -107,8 +123,12 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
 <<<<<<< HEAD
         │   📚 Knowledge Assistant tab                                  │
 =======
+<<<<<<< HEAD
+        │   📚 Knowledge Assistant tab                                  │
+=======
         │   📚 Knowledge Assistant tab                                  │ 
 >>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a
         │   rag_engine.py — ChurnRAGEngine (Ollama embeddings + FAISS)   │
         │   question → retrieve top-k CRM notes → grounded LLM answer    │
         └────────────────────────────────────────────────────────────────┘
@@ -403,6 +423,9 @@ Insights** (global feature importance and model comparison).
 | Gradient Boosting | 78.4% | 0.836 | 0.936 ± 0.053 |
 | Random Forest (Tuned) | 77.2% | 0.826 | 0.932 (search CV score) |
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a
 
 \* The Voting Ensemble has the highest raw ROC-AUC but is **excluded from
 production candidacy** — it doesn't expose `.feature_importances_`, which
@@ -420,6 +443,9 @@ has the highest ROC-AUC (0.840) and is the deployed production model — see
 | Tenure 0–12 months | 47.4% |
 | Electronic check payment | 45.0% |
 | Two-year contract | 2.8% |
+<<<<<<< HEAD
+---
+=======
 =======
 >>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
 
@@ -452,3 +478,4 @@ has the highest ROC-AUC (0.840) and is the deployed production model — see
 
 
 *Digital Egypt Pioneers Initiative — Data Analytics Specialist Track*
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a

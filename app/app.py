@@ -321,8 +321,12 @@ body, p, div, span, label, select, input, button { font-family: 'Inter', sans-se
 <<<<<<< HEAD
 /* ── AI flagship cards - visually distinct from ordinary cards ─────────── */
 =======
+<<<<<<< HEAD
+/* ── AI flagship cards - visually distinct from ordinary cards ─────────── */
+=======
 /* ── AI flagship cards — visually distinct from ordinary cards ─────────── */
 >>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a
 .ai-card {
   position: relative; overflow: hidden;
   background: linear-gradient(160deg, rgba(99,102,241,0.06) 0%, var(--surface) 55%);
@@ -1482,8 +1486,12 @@ def main() -> None:
 <<<<<<< HEAD
             an AI-generated retention plan - powered by a locally-hosted LLM and
 =======
+<<<<<<< HEAD
+            an AI-generated retention plan - powered by a locally-hosted LLM and
+=======
             an AI-generated retention plan — powered by a locally-hosted LLM and
 >>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a
             a RAG knowledge base built on real customer data.
           </div>
         </div>
@@ -1615,8 +1623,12 @@ def main() -> None:
 <<<<<<< HEAD
                     Fill in the form on the left - or choose an <strong>example</strong> -
 =======
+<<<<<<< HEAD
+                    Fill in the form on the left - or choose an <strong>example</strong> -
+=======
                     Fill in the form on the left — or choose an <strong>example</strong> —
 >>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
+>>>>>>> 36e954e973bc9f79e5e7ad4dac3aa87caae38f5a
                     then click <strong>Run Prediction</strong> to see the result,
                     AI explanation, and retention strategy.
                   </div>
