@@ -7,6 +7,7 @@ ChurnGuard AI is an end-to-end system that predicts which telecom customers are
 likely to churn, explains *why* in plain language, and generates a
 personalised retention plan — combining a trained ML model, a local LLM, and
 a retrieval-augmented knowledge base, all served through a Streamlit app.
+<<<<<<< HEAD
 
 ![Predict Tab Screenshot](docs/screenshots/predict_tab.png)
 *(screenshot placeholder — add after final UI pass)*
@@ -32,6 +33,29 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
 
 ## What This Project Does
 
+=======
+---
+
+## Table of Contents
+
+- [What This Project Does](#what-this-project-does)
+- [Architecture Overview](#architecture-overview)
+- [Machine Learning Pipeline](#machine-learning-pipeline)
+- [Feature Engineering](#feature-engineering)
+- [Explainability — SHAP](#explainability--shap)
+- [AI Explanation & Retention Strategy Generation](#ai-explanation--retention-strategy-generation)
+- [Local RAG — Knowledge Assistant](#local-rag--knowledge-assistant)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Technologies Used](#technologies-used)
+- [Model Results](#model-results)
+
+---
+
+## What This Project Does
+
+>>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
 1. Trains and compares several classifiers on the Telco Customer Churn dataset
    and automatically deploys the best production-eligible model.
 2. Serves live predictions through a Streamlit app, with a per-customer risk
@@ -55,7 +79,11 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
                          └────────────┬─────────────┘
                                       │
                      ┌────────────────┼─────────────────┐
+<<<<<<< HEAD
                      ▼                                   ▼
+=======
+                     ▼                                  ▼
+>>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
         ┌──────────────────────┐              ┌────────────────────────────┐
         │   ML TRAINING PATH   │              │   CRM KNOWLEDGE PATH       │
         │  preprocessing.py    │              │  generate_crm_notes.py     │
@@ -64,7 +92,11 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
         │  → churn_model.pkl   │              │  → ingest_knowledge.py     │
         └──────────┬───────────┘              │  → FAISS vector index      │
                    │                          └─────────────┬──────────────┘
+<<<<<<< HEAD
                     ▼                                         ▼
+=======
+                   ▼                                        ▼
+>>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
         ┌────────────────────────────────────────────────────────────────┐
         │                      app/app.py (Streamlit)                    │
         │                                                                │
@@ -75,7 +107,11 @@ a retrieval-augmented knowledge base, all served through a Streamlit app.
         │   ai_engine.py — ChurnAIEngine (Ollama / Llama 3.1)            │
         │   SHAP factors → validated AI explanation → validated strategy │
         │                                                                │
+<<<<<<< HEAD
         │   📚 Knowledge Assistant tab                                  │
+=======
+        │   📚 Knowledge Assistant tab                                  │ 
+>>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
         │   rag_engine.py — ChurnRAGEngine (Ollama embeddings + FAISS)   │
         │   question → retrieve top-k CRM notes → grounded LLM answer    │
         └────────────────────────────────────────────────────────────────┘
@@ -369,6 +405,7 @@ Insights** (global feature importance and model comparison).
 | Random Forest | 76.5% | 0.838 | 0.914 ± 0.023 |
 | Gradient Boosting | 78.4% | 0.836 | 0.936 ± 0.053 |
 | Random Forest (Tuned) | 77.2% | 0.826 | 0.932 (search CV score) |
+<<<<<<< HEAD
 
 \* The Voting Ensemble has the highest raw ROC-AUC but is **excluded from
 production candidacy** — it doesn't expose `.feature_importances_`, which
@@ -386,9 +423,17 @@ has the highest ROC-AUC (0.840) and is the deployed production model — see
 | Tenure 0–12 months | 47.4% |
 | Electronic check payment | 45.0% |
 | Two-year contract | 2.8% |
+=======
+>>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
 
----
+\* The Voting Ensemble has the highest raw ROC-AUC but is **excluded from
+production candidacy** — it doesn't expose `.feature_importances_`, which
+the SHAP explanation pipeline and the Model Insights dashboard both require.
+Among the remaining, feature-importance-exposing candidates, **XGBoost**
+has the highest ROC-AUC (0.840) and is the deployed production model — see
+[Automatic production-model selection](#machine-learning-pipeline).
 
+<<<<<<< HEAD
 ## Screenshots
 
 *(placeholders — replace with final app screenshots before submission)*
@@ -396,7 +441,17 @@ has the highest ROC-AUC (0.840) and is the deployed production model — see
 | Predict | Knowledge Assistant | Model Insights |
 |---|---|---|
 | `docs/screenshots/predict_tab.png` | `docs/screenshots/knowledge_tab.png` | `docs/screenshots/insights_tab.png` |
+=======
+### Top Churn Drivers
 
----
+| Signal | Churn Rate |
+|---|---|
+| Month-to-month contract | 42.7% |
+| Fiber optic + no security | 55%+ |
+| Tenure 0–12 months | 47.4% |
+| Electronic check payment | 45.0% |
+| Two-year contract | 2.8% |
+>>>>>>> c96075c1aff0f9f90768d6d78f2d8f2e0079ddd2
+
 
 *Digital Egypt Pioneers Initiative — Data Analytics Specialist Track*
