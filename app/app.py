@@ -1264,7 +1264,6 @@ def _render_knowledge_base_tab(rag_engine) -> None:
         "List the churn risk indicators for customer 7590-VHVEG.",
         "What internet service does customer 7590-VHVEG use?",
         "Explain customer 7590-VHVEG's payment method.",
-        "Why is Online Security listed as a churn risk indicator?",
         "What payment method does customer 7590-VHVEG use?",
         "Explain the risk indicators for Fiber Optic customers.",
     ]

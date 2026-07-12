@@ -297,7 +297,7 @@ def validate_explanation(
     missing = [f["name"] for f in factors if not any(
         t in explanation.lower() for t in _factor_keywords(f)
     )]
-    if len(missing) >= 2:
+    if len(missing) >= 1:
         reasons.append(f"does not discuss factor(s): {missing}")
 
     allowed_fields = set()
@@ -678,6 +678,11 @@ Format rules — follow these exactly:
 - Focus only on actions that a CRM agent can execute immediately
 - Do NOT repeat the churn probability or risk level
 - Output ONLY the action lines — no preamble, no header, no summary
+
+Example of the exact line format required (structure only — invent your
+own content tied to THIS customer's actual signals, do not reuse this
+example's wording, offer, or numbers):
+    [HIGH] Offer a loyalty discount tied to the contract signal | within 3 days | reduced cancellation risk
 """
 
 _STRATEGY_HUMAN = """\
@@ -730,7 +735,7 @@ class ChurnAIEngine:
     _DEFAULT_MODEL      = "llama3.1:8b"
     _DEFAULT_BASE_URL   = "http://localhost:11434"
     _DEFAULT_MAX_TOKENS = 1024
-    _DEFAULT_TEMP       = 0.3
+    _DEFAULT_TEMP       = 0.2
 
     # AUDIT FIX: this replaces _SERVICE_MAP / _fmt_services. The old code
     # always handed the LLM contract + tenure + monthly_charges + full
@@ -1025,11 +1030,20 @@ class ChurnAIEngine:
         factors: list[dict],
     ) -> tuple[str, dict]:
         """
-        Returns (final_text, meta). Strategy uses repair (not regeneration)
-        as its primary recovery path per Issue 7 — only falls back to the
-        deterministic template if repair can't salvage >= 3 valid lines.
+        Returns (final_text, meta). Recovery path, in order:
+          1. One regeneration attempt with corrective feedback naming
+             exactly what validate_strategy() rejected — the same pattern
+             generate_explanation_safe() already uses. This gives the LLM
+             a chance to fix itself before any deterministic rewriting.
+          2. Deterministic repair_strategy() on the best available draft
+             (the regenerated one if it was produced, else the original).
+          3. Deterministic fallback template if repair can't salvage
+             >= 3 valid lines.
+        validate_strategy() / repair_strategy() themselves are unchanged —
+        this only adds the regeneration step ahead of repair, so it never
+        reaches the caller without having passed the exact same checks.
         """
-        meta = {"repaired": False, "fallback_used": False, "issues": []}
+        meta = {"regenerated": False, "repaired": False, "fallback_used": False, "issues": []}
 
         text = self.generate_retention_strategy(raw, prob, risk_level, ai_explanation, factors)
         ok, issues = validate_strategy(text, risk_level, factors)
@@ -1037,19 +1051,40 @@ class ChurnAIEngine:
             return text, meta
 
         meta["issues"] = issues
+        _log_validation_failure("strategy, first attempt -> regenerating", issues)
+
+        meta["regenerated"] = True
+        corrective = (
+            "\n\nYour previous attempt was rejected for: " + "; ".join(issues) +
+            ". Regenerate, strictly following the format and grounding rules above."
+        )
+        try:
+            inputs = self._base_inputs(prob, risk_level)
+            inputs["ai_explanation"]  = ai_explanation or "Not available."
+            inputs["top_factors"]     = self._fmt_factors(factors)
+            inputs["factor_context"]  = self._fmt_factor_context(factors, raw) + corrective
+            text2 = self._strategy_chain.invoke(inputs)
+        except Exception:
+            text2 = text
+
+        ok2, issues2 = validate_strategy(text2, risk_level, factors)
+        if ok2:
+            return text2, meta
+
+        meta["issues"] = issues2
         meta["repaired"] = True
-        _log_validation_failure("strategy, before repair", issues)
-        repaired = repair_strategy(text, risk_level, factors)
+        _log_validation_failure("strategy, after regeneration -> repairing", issues2)
+        repaired = repair_strategy(text2, risk_level, factors)
         if repaired:
-            ok2, issues2 = validate_strategy(repaired, risk_level, factors)
-            if ok2:
+            ok3, issues3 = validate_strategy(repaired, risk_level, factors)
+            if ok3:
                 return repaired, meta
-            meta["issues"] = issues2
-            _log_validation_failure("strategy, after repair -> falling back to template", issues2)
+            meta["issues"] = issues3
+            _log_validation_failure("strategy, after repair -> falling back to template", issues3)
         else:
             _log_validation_failure(
                 "strategy, repair could not salvage >=3 valid lines -> falling back to template",
-                issues,
+                issues2,
             )
 
         meta["fallback_used"] = True

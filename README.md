@@ -386,4 +386,25 @@ has the highest ROC-AUC (0.840) and is the deployed production model — see
 
 ---
 
+
+\* The Voting Ensemble has the highest raw ROC-AUC but is **excluded from
+production candidacy** — it doesn't expose `.feature_importances_`, which
+the SHAP explanation pipeline and the Model Insights dashboard both require.
+Among the remaining, feature-importance-exposing candidates, **XGBoost**
+has the highest ROC-AUC (0.840) and is the deployed production model — see
+[Automatic production-model selection](#machine-learning-pipeline).
+
+
+### Top Churn Drivers
+
+| Signal | Churn Rate |
+|---|---|
+| Month-to-month contract | 42.7% |
+| Fiber optic + no security | 55%+ |
+| Tenure 0–12 months | 47.4% |
+| Electronic check payment | 45.0% |
+| Two-year contract | 2.8% |
+
+
+
 *Digital Egypt Pioneers Initiative — Data Analytics Specialist Track*
